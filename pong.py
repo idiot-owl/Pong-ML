@@ -18,18 +18,20 @@ GREEN = (25, 123, 48)
 BLUE = (0, 0, 255)
 RED = (255, 0, 0)
 WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
 ballX = 15
 slope = 0.3
 intercept = 1
+count = 0
+trainingset = np.array([])
 d = 1
 d2 = 1
 r1 = 0
 r2 = 0
-DS.fill(GREEN)
-
-pygame.draw.rect(DS, BLUE, (0, 10, 15, 100))
-pygame.draw.rect(DS, RED, (485, 10, 15, 100))
-pygame.draw.circle(DS, (0, 255, 0),
+DS.fill(BLACK)
+pygame.draw.rect(DS, WHITE, (0, 10, 15, 100))
+# pygame.draw.rect(DS, RED, (485, 10, 15, 100))
+pygame.draw.circle(DS, WHITE,
                    (ballX, int(slope*ballX + intercept)), 10, 1)
 pygame.key.set_repeat(50, 50)
 while True:
@@ -81,13 +83,15 @@ while True:
     if ballX < 15:
         if r1 > slope*ballX + intercept or r1 + 100 < slope*ballX + intercept:
             print("Lost")
+            output = 0
             ballX = 15
             slope = 0.3
             d = 1
             intercept = 1
-            pygame.draw.rect(DS, BLUE, (0, r1, 15, 100))
-            pygame.draw.rect(DS, RED, (485, r2, 15, 100))
-            pygame.draw.circle(DS, (0, 255, 0),
+            DS.fill(BLACK)
+            pygame.draw.rect(DS, WHITE, (0, r1, 15, 100))
+        #     pygame.draw.rect(DS, RED, (485, r2, 15, 100))
+            pygame.draw.circle(DS, WHITE,
                                (ballX, int(slope*ballX + intercept)), 10)
             pygame.display.update()
             pass
@@ -113,11 +117,17 @@ while True:
     if d == 1:
         ballX += 5
     X = surfarray.pixels2d(pygame.display.get_surface())
+    X.reshape(250000, 1)
+    # iska dekh le.. y ka and final trainingset ka jo bhi h
     clock.tick(100)
-    DS.fill(GREEN)
-
-    pygame.draw.rect(DS, BLUE, (0, r1, 15, 100))
-    pygame.draw.rect(DS, RED, (485, r2, 15, 100))
-    pygame.draw.circle(DS, (0, 255, 0),
+    DS.fill(BLACK)
+    count += 1
+    if(count > 10000):
+        # yaha pr file write kr diyo
+        pygame.quit()
+        sys.exit()
+    pygame.draw.rect(DS, WHITE, (0, r1, 15, 100))
+    # pygame.draw.rect(DS, RED, (485, r2, 15, 100))
+    pygame.draw.circle(DS, WHITE,
                        (ballX, int(slope*ballX + intercept)), 10)
     pygame.display.update()
