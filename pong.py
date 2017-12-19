@@ -1,15 +1,19 @@
+import numpy as np
+import pygame.surfarray as surfarray
 import pygame
 import sys
+import scipy.linalg
 import decimal
 import random
+import scipy as scipy
 from pygame.locals import *
+import pylab as pl
 
 pygame.init()
 
 DS = pygame.display.set_mode((500, 500), 0, 32)
 pygame.display.set_caption('Pong')
 clock = pygame.time.Clock()
-
 GREEN = (25, 123, 48)
 BLUE = (0, 0, 255)
 RED = (255, 0, 0)
@@ -68,9 +72,9 @@ while True:
         intercept += 2*slope*ballX
         d = -1
         if slope > 0:
-            slope = float(decimal.Decimal(random.randrange(0, 100))/100)
+            slope = float(decimal.Decimal(random.randrange(25, 200))/100)
         else:
-            slope = -1*float(decimal.Decimal(random.randrange(155, 389))
+            slope = -1*float(decimal.Decimal(random.randrange(25, 200))
                              / 100)
         slope = -slope
         intercept = current_y - slope*ballX
@@ -88,9 +92,16 @@ while True:
             pygame.display.update()
             pass
         else:
+            current_y = slope*ballX + intercept
             intercept += 2*slope*ballX
             d = 1
+            if slope > 0:
+                slope = float(decimal.Decimal(random.randrange(25, 200))/100)
+            else:
+                slope = -1*float(decimal.Decimal(random.randrange(25, 200))
+                                 / 100)
             slope = -slope
+            intercept = current_y - slope*ballX
     if slope*ballX + intercept <= 0:
         intercept += 2*slope*ballX
         slope = -slope
@@ -101,6 +112,7 @@ while True:
         ballX -= 5
     if d == 1:
         ballX += 5
+    X = surfarray.pixels2d(pygame.display.get_surface())
     clock.tick(100)
     DS.fill(GREEN)
 
